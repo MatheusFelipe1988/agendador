@@ -2,7 +2,6 @@ package com.agenda.agendador.domain.service;
 import com.agenda.agendador.domain.entity.Paciente;
 import com.agenda.agendador.domain.repository.PacienteRepository;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +33,15 @@ public class PacienteService {
 
         return repository.save(paciente);
     }
+    public Paciente alterar (Long id, Paciente paciente){
+        Optional<Paciente> optPaciente = this.buscarPorId(id);
+        if(optPaciente.isEmpty()){
+            throw new BusinessException("Paciente nao cadastrado");
+        }
+        paciente.setId(id);
+        return salvar(paciente);
+    }
+
     public List<Paciente> listarTodos(){
         return repository.findAll();
     }
