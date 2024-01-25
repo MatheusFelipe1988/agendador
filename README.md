@@ -1,3 +1,11 @@
 # agendador 
+Projeto de micro serviço de agendar consulta para pacientes em Java springboot com testes unitários e deploy.
 
-Projeto de micro serviço com testes unitários e deploy utilizando Java e RabbitMQ com design SOLID
+
+### Work used
+- Java
+- Springboot
+- MySQL
+- Mock
+- Junit
+- Swagger
