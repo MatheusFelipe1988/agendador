@@ -1,0 +1,16 @@
+version: '4.31.0'
+
+services:
+  db:
+    image: mysql:8.0.36
+    environment:
+      MYSQL_ROOT_PASSWORD: senha
+      MYSQL_DATABASE: agenda
+      MYSQL_PASSWORD: senha
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
