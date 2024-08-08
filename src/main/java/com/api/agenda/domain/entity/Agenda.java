@@ -1,6 +1,7 @@
 package com.api.agenda.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 public class Agenda {
 
     @Id
