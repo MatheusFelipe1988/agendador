@@ -23,6 +23,8 @@ public class Agenda {
 
     private LocalDateTime horario;
 
+    private LocalDateTime data_criacao;
+
     @ManyToOne
     private Paciente paciente;
 }
