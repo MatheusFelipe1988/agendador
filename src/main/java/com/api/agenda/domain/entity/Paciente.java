@@ -1,13 +1,12 @@
 package com.api.agenda.domain.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -27,5 +26,9 @@ public class Paciente {
     private String email;
 
     private String cpf;
+
+    @OneToMany
+    @JoinColumn(name = "paciente_id")
+    private List<Endereco> endereco;
 
 }
