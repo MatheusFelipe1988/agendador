@@ -2,7 +2,7 @@ package com.api.agenda.domain.service;
 
 import com.api.agenda.domain.entity.Paciente;
 import com.api.agenda.domain.repository.PacienteRepository;
-import com.api.agenda.exception.BussinessException;
+import com.api.agenda.configuration.exception.BussinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
