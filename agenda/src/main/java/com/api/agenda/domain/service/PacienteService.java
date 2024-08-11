@@ -18,6 +18,7 @@ public class PacienteService {
     private final PacienteRepository repository;
 
     public Paciente saver(Paciente paciente){
+
         boolean existCpf = false;
 
         Optional<Paciente> optPaciente = repository.findByCpf(paciente.getCpf());
@@ -25,10 +26,9 @@ public class PacienteService {
         if(optPaciente.isEmpty()){
             if (!optPaciente.get().getId().equals(paciente.getId())){
                 existCpf = true;
+            }if (existCpf){
+                throw new BussinessException("CPF cadastrado");
             }
-        }
-        if (existCpf){
-            throw new BussinessException("CPF cadastrado");
         }
         return repository.save(paciente);
     }
