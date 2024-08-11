@@ -3,7 +3,6 @@ package com.api.agenda.controller;
 import com.api.agenda.api.request.PacienteRequest;
 import com.api.agenda.domain.entity.Paciente;
 import com.api.agenda.domain.repository.PacienteRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +19,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
-public class PacienteControllerTest {
+class PacienteControllerTest {
 
     @Autowired
     ObjectMapper mapper;
@@ -37,7 +36,7 @@ public class PacienteControllerTest {
         paciente.setNome("Max");
         paciente.setSobreNome("Verstappen");
         paciente.setEmail("max.com");
-        paciente.setCpf("123456");
+        paciente.setCpf("123");
         repository.save(paciente);
     }
 
