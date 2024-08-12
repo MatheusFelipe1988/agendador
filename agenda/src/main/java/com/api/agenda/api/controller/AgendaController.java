@@ -61,7 +61,7 @@ public class AgendaController {
             @ApiResponse(responseCode = "200", description = "agendado com sucesso"),
             @ApiResponse(responseCode = "400", description = "erro no agendamento")
     })
-    @PostMapping
+    @PostMapping("/post")
     public ResponseEntity<AgendaResponse> saver(@Valid @RequestBody AgendaRequest request){
         Agenda agenda = mapper.toAgenda(request);
         Agenda agendaSave = service.saver(agenda);
