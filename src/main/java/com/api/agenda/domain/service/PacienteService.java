@@ -2,7 +2,7 @@ package com.api.agenda.domain.service;
 
 import com.api.agenda.domain.entity.Paciente;
 import com.api.agenda.domain.repository.PacienteRepository;
-import com.api.agenda.exception.BussinessException;
+import com.api.agenda.configuration.exception.BussinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +18,7 @@ public class PacienteService {
     private final PacienteRepository repository;
 
     public Paciente saver(Paciente paciente){
+
         boolean existCpf = false;
 
         Optional<Paciente> optPaciente = repository.findByCpf(paciente.getCpf());
@@ -25,10 +26,9 @@ public class PacienteService {
         if(optPaciente.isEmpty()){
             if (!optPaciente.get().getId().equals(paciente.getId())){
                 existCpf = true;
+            }if (existCpf){
+                throw new BussinessException("CPF cadastrado");
             }
-        }
-        if (existCpf){
-            throw new BussinessException("CPF cadastrado");
         }
         return repository.save(paciente);
     }
