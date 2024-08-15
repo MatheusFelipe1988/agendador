@@ -1,6 +1,5 @@
 package com.api.agenda.configuration.token;
 
-import com.api.agenda.configuration.exception.BussinessException;
 import com.api.agenda.domain.entity.Usuario;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -41,7 +40,8 @@ public class TokenService {
                     .verify(token)
                     .getSubject();
         }catch (JWTVerificationException e){
-            throw new BussinessException("Error to validate");
+            return "";
+            //throw new BussinessException("Error to validate");
         }
     }
 

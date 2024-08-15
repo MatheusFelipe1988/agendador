@@ -1,7 +1,7 @@
 package com.api.agenda.configuration;
 
 import com.api.agenda.configuration.filter.SecurityFilter;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -18,21 +18,20 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 
 @Configuration
-@RequiredArgsConstructor
 @EnableWebSecurity
 public class WebSecurityConfig{
 
-    private final SecurityFilter securityFilter;
+    @Autowired
+    private SecurityFilter securityFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/user/register","/user/login","/paciente/post","/agenda/post").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/paciente","/agenda").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/paciente").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/paciente").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/usuario/cadastro","/usuario/login").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/paciente","/agenda").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/paciente","/agenda").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).build();
     }
