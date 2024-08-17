@@ -24,14 +24,18 @@ public class WebSecurityConfig{
     @Autowired
     private SecurityFilter securityFilter;
 
+    public WebSecurityConfig(SecurityFilter securityFilter) {
+        this.securityFilter = securityFilter;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST,"/usuario/cadastro","/usuario/login").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/paciente","/agenda").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/paciente","/agenda").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/usuario/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/usuario/cadastro").permitAll()
+                        .requestMatchers("/paciente").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).build();
     }
