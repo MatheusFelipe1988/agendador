@@ -1,16 +1,55 @@
 package com.api.agenda.domain.entity;
 
-public enum Role {
-    ADMIN("admin"),
-    USER("user");
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-    private String role;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 
-    public String getRole() {
-        return role;
+@Getter
+@Setter
+@NoArgsConstructor
+@Entity
+public class Role {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "roles")
+    private Collection<Usuario> usuarios = new HashSet<>();
+
+    public Role(String name) {
+        this.name = name;
     }
 
-    Role(String role){
-        this.role= role;
+    public void assignRoleToUser(Usuario usuario){
+        usuario.getRoles().add(this);
+        this.getUsuarios().add(usuario);
     }
+
+    public void removeUserFromRole(Usuario usuario){
+        usuario.getRoles().add(this);
+        this.getUsuarios().add(usuario);
+    }
+
+    public void removeAllUsersFromRole(){
+        if (this.getUsuarios() != null){
+            List<Usuario> roleUsers = this.getUsuarios().stream().toList();
+            roleUsers.forEach(this :: removeUserFromRole);
+        }
+    }
+
+    public String getName(){
+        return name != null? name : "";
+    }
+
+
 }

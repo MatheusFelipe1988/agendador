@@ -11,6 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface PacienteRepository extends JpaRepository<Paciente, Long> {
+
     Optional<Paciente> findByCpf(String  cpf);
 
     @Query("SELECT p FROM Paciente p WHERE p.cpf = ?1")

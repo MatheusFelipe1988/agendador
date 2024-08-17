@@ -1,51 +1,68 @@
 package com.api.agenda.configuration.token;
 
-import com.api.agenda.domain.entity.Usuario;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.api.agenda.configuration.exception.BussinessException;
+import com.api.agenda.configuration.filter.AgendaUserDetails;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.stereotype.Component;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.security.Key;
+import java.util.Date;
+import java.util.List;
 
-@Service
+@Component
 public class TokenService {
 
+    private static final Logger logger = LoggerFactory.getLogger(TokenService.class);
+
     @Value("${auth.token.jwtSecret}")
-    private String secret;
+    private String jwtSecret;
 
-    public String generateToken(Usuario usuario){
-        try {
-            Algorithm algorithm = Algorithm.HMAC256(secret);
-            String token = JWT.create()
-                    .withIssuer("auth")
-                    .withSubject(usuario.getEmail())
-                    .withExpiresAt(expirationDate())
-                    .sign(algorithm);
-            return token;
-        }catch (JWTVerificationException e){
-            throw new RuntimeException("Token não gerado", e);
-        }
+    @Value("${auth.token.expirationInMils}")
+    private int jwtExpiration;
+
+    public String generateTokenForUser(Authentication authentication){
+        AgendaUserDetails userPrincipal = (AgendaUserDetails) authentication.getPrincipal();
+        List<String> roles = userPrincipal.getAuthorities()
+                .stream().map(GrantedAuthority::getAuthority).toList();
+        return Jwts.builder()
+                .setSubject(userPrincipal.getUsername())
+                .claim("roles", roles)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date((new Date()).getTime()+jwtExpiration))
+                .signWith(key(), SignatureAlgorithm.HS256).compact();
     }
 
-    public String validateToken(String token){
-        try {
-            Algorithm algorithm = Algorithm.HMAC256(secret);
-            return JWT.require(algorithm)
-                    .withIssuer("auth")
-                    .build()
-                    .verify(token)
-                    .getSubject();
-        }catch (JWTVerificationException e){
-            return "";
-            //throw new BussinessException("Error to validate");
-        }
+    public Key key(){
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }
 
-    private Instant expirationDate() {
-        return LocalDateTime.now().plusMinutes(5).toInstant(ZoneOffset.of("-03:00"));
+    public String getUsernameFromToken(String token){
+        return Jwts.parserBuilder()
+                .setSigningKey(key())
+                .build()
+                .parseClaimsJws(token).getBody().getSubject();
+    }
+
+    public boolean validateToken(String token){
+        try {
+            Jwts.parserBuilder().setSigningKey(key()).build().parse(token);
+            return true;
+        }catch (MalformedJwtException e){
+            logger.error("invalid token: {}", e.getMessage());
+        }catch (ExpiredJwtException e){
+            logger.error("Token expired: {}", e.getMessage());
+        }catch (UnsupportedJwtException e){
+            logger.error("This token is not supported: {}", e.getMessage());
+        }catch (IllegalArgumentException e){
+            logger.error("No claims found: {}", e.getMessage());
+        }
+        return false;
     }
 }

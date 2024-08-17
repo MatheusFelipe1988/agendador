@@ -1,25 +1,53 @@
 package com.api.agenda.domain.service;
 
+import com.api.agenda.configuration.exception.BussinessException;
+import com.api.agenda.domain.entity.Role;
+import com.api.agenda.domain.entity.Usuario;
+import com.api.agenda.domain.repository.RoleRepository;
 import com.api.agenda.domain.repository.UsuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.List;
 
 @Service
-public class UsuarioService implements UserDetailsService {
+@RequiredArgsConstructor
+public class UsuarioService {
 
-    @Autowired
-    private UsuarioRepository repository;
+    private final UsuarioRepository repository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UsuarioService(UsuarioRepository repository) {
-        this.repository = repository;
+    public Usuario registerUser(Usuario usuario){
+        if (repository.existsByEmail(usuario.getEmail())){
+            throw new BussinessException(usuario.getEmail() + "already exist");
+        }
+        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+        System.out.println(usuario.getPassword());
+        Role useRole = roleRepository.findByName("ROLE_USER").get();
+        usuario.setRoles(Collections.singleton(useRole));
+        return repository.save(usuario);
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return repository.findByEmail(username);
+    public List<Usuario> getUsuarios(){
+        return repository.findAll();
     }
+
+    @Transactional
+    public void deleteUser(String email){
+        Usuario theUsuario = getUser(email);
+        if (theUsuario != null){
+            repository.deleteByEmail(email);
+        }
+    }
+
+    public Usuario getUser(String email){
+        return repository.findByEmail(email)
+                .orElseThrow(() -> new BussinessException("Not found user"));
+
+    }
+
 }

@@ -34,7 +34,7 @@ public class PacienteController {
             @ApiResponse(responseCode = "200", description = "Paciente novo com sucesso"),
             @ApiResponse(responseCode = "400", description = "erro no cadastro")
     })
-    @PostMapping
+    @PostMapping("/post")
     public ResponseEntity<PacienteResponse> saver(@Valid @RequestBody PacienteRequest request){
         Paciente paciente = mapper.toPaciente(request);
         Paciente pacienteSalvo = service.saver(paciente);
