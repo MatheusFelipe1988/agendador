@@ -8,6 +8,7 @@ import com.api.agenda.domain.repository.RoleRepository;
 import com.api.agenda.domain.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ public class UsuarioService implements IUsuaioService {
     @Override
     public Usuario registerUser(Usuario usuario){
         if (repository.existsByEmail(usuario.getEmail())){
-            throw new BussinessException(usuario.getEmail() + "already exist");
+            throw new BussinessException(usuario.getEmail() + "already exists");
         }
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         System.out.println(usuario.getPassword());
@@ -48,7 +49,7 @@ public class UsuarioService implements IUsuaioService {
 
     public Usuario getUser(String email){
         return repository.findByEmail(email)
-                .orElseThrow(() -> new BussinessException("Not found user"));
+              .orElseThrow(() -> new UsernameNotFoundException("Not found user"));
 
     }
 

@@ -25,7 +25,7 @@ public class RoleService {
     public Role createRole(Role theRole){
         String roleName = "ROLE_" + theRole.getName().toUpperCase();
         Role role = new Role(roleName);
-        if(repository.existsByName(roleName)){
+        if(repository.existsByName(role)){
             throw new BussinessException(theRole.getName() + "Role already exist");
         }
         return repository.save(role);

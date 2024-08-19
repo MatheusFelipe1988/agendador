@@ -18,7 +18,7 @@ public class AgendaUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Usuario usuario = repository.findByEmail(email)
-                .orElseThrow(() -> new BussinessException("Not Found"));
+            .orElseThrow(() -> new BussinessException("Not Found"));
 
         return AgendaUserDetails.buildUserDetails(usuario);
     }
