@@ -12,8 +12,8 @@ import java.util.List;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @Entity
+@NoArgsConstructor
 public class Role {
 
     @Id
@@ -47,7 +47,7 @@ public class Role {
         }
     }
 
-    public String getName(){
+    public  String getName(){
         return name != null? name : "";
     }
 

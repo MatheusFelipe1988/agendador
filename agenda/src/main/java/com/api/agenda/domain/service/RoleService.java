@@ -1,6 +1,7 @@
 package com.api.agenda.domain.service;
 
 import com.api.agenda.configuration.exception.BussinessException;
+import com.api.agenda.configuration.exception.UserErrorException;
 import com.api.agenda.domain.entity.Role;
 import com.api.agenda.domain.entity.Usuario;
 import com.api.agenda.domain.repository.RoleRepository;
@@ -26,7 +27,7 @@ public class RoleService {
         String roleName = "ROLE_" + theRole.getName().toUpperCase();
         Role role = new Role(roleName);
         if(repository.existsByName(role)){
-            throw new BussinessException(theRole.getName() + "Role already exist");
+            throw new UserErrorException(theRole.getName() + "Role already exist");
         }
         return repository.save(role);
     }

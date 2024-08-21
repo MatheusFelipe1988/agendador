@@ -1,6 +1,5 @@
 package com.api.agenda.configuration.token;
 
-import com.api.agenda.configuration.exception.BussinessException;
 import com.api.agenda.configuration.filter.AgendaUserDetails;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;

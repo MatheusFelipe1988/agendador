@@ -55,7 +55,7 @@ public class WebSecurity {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/paciente/**","/agenda/**", "/usuarios/register-user").permitAll()
+                        .requestMatchers("/paciente/**","/agenda/**","/usuarios/**").permitAll()
                         .anyRequest().authenticated()
                 );
         httpSecurity.authenticationProvider(authenticationProvider());

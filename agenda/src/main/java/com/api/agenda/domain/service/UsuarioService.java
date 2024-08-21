@@ -1,6 +1,6 @@
 package com.api.agenda.domain.service;
 
-import com.api.agenda.configuration.exception.BussinessException;
+import com.api.agenda.configuration.exception.UserErrorException;
 import com.api.agenda.domain.entity.Role;
 import com.api.agenda.domain.entity.Usuario;
 import com.api.agenda.domain.repository.IUsuaioService;
@@ -26,7 +26,7 @@ public class UsuarioService implements IUsuaioService {
     @Override
     public Usuario registerUser(Usuario usuario){
         if (repository.existsByEmail(usuario.getEmail())){
-            throw new BussinessException(usuario.getEmail() + "already exists");
+            throw new UserErrorException(usuario.getEmail() + "already exists");
         }
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         System.out.println(usuario.getPassword());

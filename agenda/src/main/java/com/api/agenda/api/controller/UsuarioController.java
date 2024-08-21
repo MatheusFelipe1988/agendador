@@ -2,7 +2,7 @@ package com.api.agenda.api.controller;
 
 import com.api.agenda.api.request.LoginRequest;
 import com.api.agenda.api.response.UsuarioResponse;
-import com.api.agenda.configuration.exception.BussinessException;
+import com.api.agenda.configuration.exception.UserErrorException;
 import com.api.agenda.configuration.filter.AgendaUserDetails;
 import com.api.agenda.configuration.token.TokenService;
 import com.api.agenda.domain.entity.Usuario;
@@ -33,11 +33,12 @@ public class UsuarioController {
     private final TokenService tokenService;
 
     @PostMapping("/register-user")
-    public ResponseEntity<?> register(@RequestBody Usuario usuario){
+    public ResponseEntity<?> registerUser(@RequestBody Usuario usuario){
         try {
             service.registerUser(usuario);
             return ResponseEntity.ok("Register success");
-        }catch (BussinessException e){
+
+        }catch (UserErrorException e){
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
     }
