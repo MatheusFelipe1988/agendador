@@ -41,7 +41,7 @@ public class Role {
     }
 
     public void removeAllUsersFromRole(){
-        if (this.getUsuarios() != null){
+        if(this.getUsuarios() != null){
             List<Usuario> roleUsers = this.getUsuarios().stream().toList();
             roleUsers.forEach(this :: removeUserFromRole);
         }

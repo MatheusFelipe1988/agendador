@@ -38,7 +38,7 @@ public class TokenService {
                 .signWith(key(), SignatureAlgorithm.HS256).compact();
     }
 
-    public Key key(){
+    private Key key(){
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }
 

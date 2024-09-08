@@ -21,10 +21,10 @@ import java.io.IOException;
 public class AuthTokenFilter extends OncePerRequestFilter {
 
     @Autowired
-    private TokenService tokenService;
+    private AgendaUserDetailsService agendaUserDetailsService;
 
     @Autowired
-    private AgendaUserDetailsService agendaUserDetailsService;
+    private TokenService tokenService;
 
     private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 

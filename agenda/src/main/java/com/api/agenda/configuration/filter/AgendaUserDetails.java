@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class AgendaUserDetails implements UserDetails {
 
     private Long id;
-    private  String email;
+    private String email;
     private String password;
     private Collection<GrantedAuthority> authorities;
 
